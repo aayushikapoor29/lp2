@@ -1,36 +1,24 @@
-def gcd(a, b):
-    while b != 0:
-        a, b = b, a % b
-    return a
+import math
 
-def find_e(phi):
-    for e in range(2, phi):
-        if gcd(e, phi) == 1:
-            return e
+def generate_keypair(p. q):
+    n = p*q
+    phi = (p-1)*(q-1)
+    e = 2
 
-def mod_inverse(e, phi):
-    for d in range(2, phi):
-        if (e * d) % phi == 1:
-            return d
+    while math.gcd(e, phi) != 1: e+=1
+        d = pow(e, -1, phi)
+return (e,n), (d, n)
 
 def encrypt(msg, e, n):
-    return [((ord(c) - ord('A')) ** e) % n for c in msg]
+    return [pow(ord(chr), e, n) for char in msg]
 
-def decrypt(cipher, d, n):
-    return ''.join([chr((c ** d) % n + ord('A')) for c in cipher])
+def decrpyt(msg, d, n):
+    return ''.join([chr(pow(chr, d, n)) for chr in msg]
 
-# Small primes for demo (not secure)
-p, q = 5, 11
-n = p * q         # 55
-phi = (p-1)*(q-1) # 40
+p = 7
+q = 3
 
-e = find_e(phi)
-d = mod_inverse(e, phi)
+public_key, private_key = generate_keypair(p, q)
+encrpyted = encrpyt('aayushikapoor', public_key[0], private_key[1])
+decrpyted = decrpyt(encrypted, private_key[0], public_key[1])
 
-message = "aayushi kapoor"  # Uppercase letters only
-cipher = encrypt(message, e, n)
-decrypted = decrypt(cipher, d, n)
-
-print("Original  :", message)
-print("Encrypted :", cipher)
-print("Decrypted :", decrypted)
